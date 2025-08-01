@@ -1,0 +1,27 @@
+1. Blog Wall - Backend API
+
+This is the backend for _Blog Wall_, a simple public blogging platform where users can post blogs with a title, content, and image.
+
+2. Built using Node.js,Express and MongoDB.
+
+3.Tech Stack
+
+- Node.js
+- Express.js
+- MongoDB & Mongoose
+- Thunder Client (for API testing)
+
+  4.API Endpoints
+
+Create a Post (POST) and (GET)
+
+URL: `http://localhost:3000/posts`  
+ Method: `POST`  
+ Body (JSON):
+
+dummy data for testing purpose
+{
+"title": "Sample Title",
+"content": "This is the content of the post.",
+"imageUrl": "https://example.com/image.jpg"
+}
