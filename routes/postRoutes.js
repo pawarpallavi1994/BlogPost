@@ -2,7 +2,29 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 
-// GET  all post
+/**
+ * @swagger
+ * tags:
+ *   name: Posts
+ *   description: Blog post endpoints
+ */
+
+/**
+ * @swagger
+ * /posts:
+ *   get:
+ *     summary: Get all blog posts
+ *     tags: [Posts]
+ *     responses:
+ *       200:
+ *         description: Returns all posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Post'
+ */
 router.get("/", async (req, res) => {
   try {
     const posts = await Post.find().sort({ createdAt: -1 });
@@ -12,25 +34,37 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST =>Create a new post
+/**
+ * @swagger
+ * /posts:
+ *   post:
+ *     summary: Create a new blog post
+ *     tags: [Posts]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PostInput'
+ *     responses:
+ *       201:
+ *         description: Post created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ */
 router.post("/", async (req, res) => {
+  const { title, content, imageUrl } = req.body;
+  if (!title || !content) {
+    return res.status(400).json({ error: "Title and content are required" });
+  }
+
   try {
-    const { title, content, imageUrl } = req.body;
-
-    if (!title || !content) {
-      return res.status(400).json({ error: "Title and content are required" });
-    }
-
-    const newPost = new Post({
-      title,
-      content,
-      imageUrl,
-    });
-
+    const newPost = new Post({ title, content, imageUrl });
     await newPost.save();
     res.status(201).json(newPost);
   } catch (err) {
-    console.error("Error creating post:", err);
     res.status(400).json({ error: "Failed to create post" });
   }
 });
